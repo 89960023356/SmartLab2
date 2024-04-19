@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,9 +41,9 @@ import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun Welcome() {
-    var email: String by remember {
+    var email: String by rememberSaveable {
         mutableStateOf("") }
-    var flag = remember {
+    var flag = rememberSaveable {
         mutableStateOf(false)
     }
     Column(modifier = Modifier
@@ -54,26 +55,14 @@ fun Welcome() {
             Text("Войдите, чтобы пользоваться функциями приложения", fontSize = 15.sp)
             Column(Modifier.padding(top = 64.dp, bottom = 0.dp)) {
                 Text("Вход по E-mail",Modifier.padding(bottom = 4.dp), fontSize = 14.sp, color = colorResource(R.color.gray))
-                val textState = remember {
-                    mutableStateOf("")
+//                val textState = remember {
+//                    mutableStateOf("")
+//                }
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                ){
+                    CustomEmail(search = email, onValueChange = {it->email=it})
                 }
-//                OutlinedTextField(value = textState.value,
-//                    onValueChange = {textState.value = it},
-//                    shape = RoundedCornerShape(10.dp),
-//                    singleLine = true,
-//                    modifier = Modifier.run {
-//                        fillMaxWidth()
-//                            .padding(bottom = 32.dp)
-//                            .background(color = colorResource(R.color.white_p))
-//                    },
-//                    placeholder = {
-//                        Text(
-//                            "example@mail.ru",
-//                            color = colorResource(R.color.gray_200)
-//                        )
-//                    }
-//                )
-                CustomEmail(search = email, onValueChange = {it->email=it})
                 flag.value = email.isNotEmpty()
                 val color = if(flag.value) ButtonDefaults.buttonColors(
                     containerColor = colorResource(R.color.blue),
@@ -82,7 +71,16 @@ fun Welcome() {
                     containerColor = colorResource(R.color.blue_s),
                     contentColor = colorResource(R.color.white)
                 )
-                ButtonExit()
+                Button(
+                    onClick = {},
+                    colors = color,
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .height(56.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text("Далее", fontSize = 17.sp, color = colorResource(R.color.white))
+                }
             }
         }
         Column(
@@ -98,7 +96,16 @@ fun Welcome() {
                 textAlign = TextAlign.Center
 
             )
-            ButtonAnother()
+            OutlinedButton(
+                onClick = {},
+                shape = RoundedCornerShape(12.dp),
+                border = BorderStroke(1.dp, color = colorResource(R.color.gray_p)),
+                modifier = Modifier
+                    .height(60.dp)
+                    .fillMaxWidth()
+            ) {
+                Text("Войти с Яндекс", fontSize = 17.sp, color = colorResource(R.color.black))
+            }
         }
     }
 }
@@ -115,87 +122,34 @@ fun CustomEmail(
             .fillMaxWidth()
             .padding(bottom = 32.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(Color(0XFFE8EFFF))
 
     ) {
         TextField(
             value = search,
             onValueChange = onValueChange,
+            shape = RoundedCornerShape(10.dp),
+            singleLine = true,
             colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color(0XFFE8EFFF),
-                focusedIndicatorColor = Color.Blue,
-                focusedTextColor = Color(0XFF578FFF),
+                containerColor = colorResource(R.color.white_p),
+                focusedIndicatorColor = Color.Transparent,
+                focusedTextColor = colorResource(R.color.black),
                 disabledIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 cursorColor = Color(0XFF578FFF),
             ),
-            modifier = Modifier.fillMaxWidth().background(Color(0XFFF5F5F9)).clip(RoundedCornerShape(10.dp)),
+            modifier = Modifier.run{
+                fillMaxWidth()
+                },
             placeholder = {
                 Text(
                     text = "example@mail.ru",
-                    color = Color(0XFF578FFF)
+                    color = colorResource(R.color.gray_200)
                 )
             }
         )
-
     }
 }
 
-
-
-//@Composable
-//fun TextField() {
-//    val textState = remember {
-//        mutableStateOf("")
-//    }
-//    OutlinedTextField(value = textState.value,
-//        onValueChange = {textState.value = it},
-//        shape = RoundedCornerShape(10.dp),
-//        singleLine = true,
-//        modifier = Modifier.run {
-//            fillMaxWidth()
-//                .padding(bottom = 32.dp)
-//                .background(color = colorResource(R.color.white_p))
-//        },
-//        placeholder = {
-//            Text(
-//                "example@mail.ru",
-//                color = colorResource(R.color.gray_200)
-//            )
-//        }
-//    )
-//}
-@Composable
-fun ButtonExit() {
-    Column {
-        Button(
-            onClick = {},
-            colors = ButtonDefaults.buttonColors(colorResource(R.color.blue_s)),
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .height(56.dp)
-                .fillMaxWidth()
-        ) {
-            Text("Далее", fontSize = 17.sp, color = colorResource(R.color.white))
-        }
-    }
-}
-@Composable
-fun ButtonAnother() {
-    Column {
-        OutlinedButton(
-            onClick = {},
-            shape = RoundedCornerShape(12.dp),
-            border = BorderStroke(1.dp, color = colorResource(R.color.gray_p)),
-            modifier = Modifier
-                .height(60.dp)
-                .fillMaxWidth()
-            ) {
-            Text("Войти с Яндекс", fontSize = 17.sp, color = colorResource(R.color.black))
-        }
-    }
-
-}
 
 @Preview(showBackground = true)
 @Composable
